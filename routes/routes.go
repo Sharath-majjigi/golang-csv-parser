@@ -69,14 +69,8 @@ func ImportCSV(c *fiber.Ctx) error {
 func GetData(c *fiber.Ctx) error{
 	db := database.GetDB()
 	var people []models.Person
-	err := db.Find(&people)
-	if err != nil{
-		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":"Failed to fetch the people from DB",
-		})
-	}
-
-	return c.JSON(fiber.Map{
+	db.Find(&people)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"count": len(people),
 		"data": people,
 	})
@@ -91,7 +85,7 @@ func GetPeopleByFName(c *fiber.Ctx) error{
 	if len(people) == 0{
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"No person exist with FirstName: "+name})
 	}else{
-		return c.Status(fiber.StatusFound).JSON(fiber.Map{
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"count": len(people),
 			"data": people,
 		})
@@ -112,7 +106,7 @@ func GetPeopleWithAge(c *fiber.Ctx) error{
 	db := database.GetDB()
 	var people[] models.Person
 	db.Where("age = ?",age).Find(&people)
-	return c.Status(fiber.StatusFound).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"count": len(people),
 		"data": people,
 	})
@@ -136,7 +130,7 @@ func DeletePeople(c *fiber.Ctx) error{
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error":"Error occured while deleting people"})
 	}
 
-	return c.JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success" :"Removed people below age: "+ageParam,
 		}) 
 }

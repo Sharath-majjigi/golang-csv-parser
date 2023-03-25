@@ -14,7 +14,7 @@ var db *gorm.DB
 func Connect() {
     var err error
 
-    db, err = gorm.Open("mysql", "YOUR_DB_CONNECTION_URL")
+    db, err = gorm.Open("mysql", "admin:adminbooks@tcp(database-1.csgjrk0tttja.ap-south-1.rds.amazonaws.com:3306)/customerDB?parseTime=true")
 
     if err != nil {
         log.Fatal(err)
